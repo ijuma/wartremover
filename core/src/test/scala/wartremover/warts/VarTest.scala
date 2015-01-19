@@ -14,4 +14,12 @@ class VarTest extends FunSuite {
     expectResult(List("var is disabled"), "result.errors")(result.errors)
     expectResult(List.empty, "result.warnings")(result.warnings)
   }
+  test("can use var with unchecked") {
+    val result = WartTestTraverser(Var) {
+      @uncheckedWart var x = 10
+      x
+    }
+    expectResult(List.empty, "result.errors")(result.errors)
+    expectResult(List.empty, "result.warnings")(result.warnings)
+  }
 }

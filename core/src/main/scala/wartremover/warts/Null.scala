@@ -4,6 +4,8 @@ package warts
 object Null extends WartTraverser {
   def apply(u: WartUniverse): u.Traverser = {
     import u.universe._
+    val utils = new TraverseUtils[u.type](u)
+    import utils.UncheckedWartAnnotation
 
     val UnapplyName: TermName = "unapply"
     val UnapplySeqName: TermName = "unapplySeq"
@@ -13,9 +15,11 @@ object Null extends WartTraverser {
       //   scala.ScalaReflectionException: object scala.xml.Elem in compiler mirror not found.
 
     new u.Traverser {
+
       override def traverse(tree: Tree) {
         val synthetic = isSynthetic(u)(tree)
         tree match {
+          case Typed(_, UncheckedWartAnnotation()) =>
           // Ignore xml literals
           case Apply(Select(left, _), _) if xmlSymbols.contains(left.tpe.typeSymbol.fullName) =>
           // Ignore synthetic case class's companion object unapply
