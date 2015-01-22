@@ -13,4 +13,11 @@ class IsInstanceOfTest extends FunSuite {
     expectResult(List("isInstanceOf is disabled"), "result.errors")(result.errors)
     expectResult(List.empty, "result.warnings")(result.warnings)
   }
+  test("isInstanceOf is disabled in a lambda with a synthetic variable") {
+    val result = WartTestTraverser(IsInstanceOf) {
+      Seq().filterNot(_.isInstanceOf[String])
+    }
+    expectResult(List("isInstanceOf is disabled"), "result.errors")(result.errors)
+    expectResult(List.empty, "result.warnings")(result.warnings)
+  }
 }

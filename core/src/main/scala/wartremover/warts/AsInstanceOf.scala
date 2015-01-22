@@ -35,7 +35,7 @@ object AsInstanceOf extends WartTraverser {
             if tt.isType && allowedCasts.contains(tt.tpe.typeSymbol.fullName) =>
 
           // Otherwise it's verboten for non-synthetic exprs
-          case Select(e, AsInstanceOfName) if !isSynthetic(u)(e) =>
+          case Select(e, AsInstanceOfName) if !isSynthetic(u)(e) || e.symbol.isParameter =>
             u.error(tree.pos, "asInstanceOf is disabled")
 
           case _ => super.traverse(tree)
